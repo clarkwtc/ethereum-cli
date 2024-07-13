@@ -3,10 +3,10 @@ package core
 import (
     "geth_cli/app/client"
     "geth_cli/app/command"
+    "geth_cli/app/configure"
     "geth_cli/app/utils"
     "github.com/joho/godotenv"
     "log"
-    "os"
 )
 
 type CLI struct {
@@ -26,12 +26,14 @@ func initEnviorment() {
 }
 
 func initContorller() *Controller {
-    url := os.Getenv("BLOCK_CHAIN_URL")
-    ethClient := client.NewEthClient(url)
+    config := configure.NewConfing()
+    ethClient := client.NewEthClient(config.URL)
 
     controller := NewController()
     controller.AddCommand("help", &command.HelpCommand{})
     controller.AddCommand("exit", &command.ExitCommand{})
+    controller.AddCommand("status", &command.StatusCommand{Config: config})
+    controller.AddCommand("switch", &command.SwitchEnvironCommand{EthClient: ethClient})
     controller.AddCommand("transaction", &command.ShowTransactionDetailCommand{EthClient: ethClient})
     controller.AddCommand("latest", &command.ShowLatestTransactionCommand{EthClient: ethClient})
     return controller

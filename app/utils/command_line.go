@@ -2,6 +2,7 @@ package utils
 
 import (
     "bufio"
+    "fmt"
     "os"
     "strings"
 )
@@ -17,6 +18,7 @@ func NewCommandLine() *CommandLine {
 func (commandLine *CommandLine) Input() (string, error) {
     input, err := commandLine.ReadString('\n')
     if err != nil {
+        fmt.Println(err)
         return "", err
     }
 

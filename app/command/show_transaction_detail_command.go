@@ -23,7 +23,7 @@ func (command *ShowTransactionDetailCommand) Execute() {
         return
     }
     fmt.Println("")
-    
+
     ethClient := command.EthClient
     receipts, err := ethClient.GetTransactionReceipt(transactionHex)
     if err != nil {
