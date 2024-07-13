@@ -6,6 +6,7 @@ import (
     "github.com/ethereum/go-ethereum/common"
     "github.com/ethereum/go-ethereum/core/types"
     "github.com/ethereum/go-ethereum/ethclient"
+    "math/big"
 )
 
 type EthClient struct {
@@ -23,17 +24,17 @@ func NewEthClient(url string) *EthClient {
     return &EthClient{ctx, client, url}
 }
 
-func (eth *EthClient) GetTransactionReceipt(transactionHex string) *types.Receipt {
+func (eth *EthClient) GetTransactionReceipt(transactionHex string) (*types.Receipt, error) {
     transactionHash := common.HexToHash(transactionHex)
     receipts, err := eth.Client.TransactionReceipt(eth.Context, transactionHash)
     if err != nil {
         fmt.Println(err)
     }
 
-    return receipts
+    return receipts, err
 }
 
-func (eth *EthClient) GetTransactionByHex(transactionHex string) *types.Transaction {
+func (eth *EthClient) GetTransactionByHex(transactionHex string) (*types.Transaction, error) {
     transactionHash := common.HexToHash(transactionHex)
     transaction, pending, err := eth.Client.TransactionByHash(eth.Context, transactionHash)
     if pending {
@@ -43,10 +44,10 @@ func (eth *EthClient) GetTransactionByHex(transactionHex string) *types.Transact
         fmt.Println(err)
     }
 
-    return transaction
+    return transaction, err
 }
 
-func GetAddresBySender(tx *types.Transaction) (common.Address, error) {
+func (eth *EthClient) GetAddresBySender(tx *types.Transaction) (common.Address, error) {
     var signer types.Signer
     switch {
     case tx.Type() == types.AccessListTxType:
@@ -62,6 +63,24 @@ func GetAddresBySender(tx *types.Transaction) (common.Address, error) {
 
 func (eth *EthClient) GetBlockByHash(hash common.Hash) (*types.Block, error) {
     block, err := eth.Client.BlockByHash(eth.Context, hash)
+    if err != nil {
+        fmt.Println(err)
+    }
+
+    return block, err
+}
+
+func (eth *EthClient) GetHeaderByNumber() (*types.Header, error) {
+    number, err := eth.Client.HeaderByNumber(eth.Context, nil)
+    if err != nil {
+        fmt.Println(err)
+    }
+
+    return number, err
+}
+
+func (eth *EthClient) GetBlockByNumber(number *big.Int) (*types.Block, error) {
+    block, err := eth.Client.BlockByNumber(eth.Context, number)
     if err != nil {
         fmt.Println(err)
     }

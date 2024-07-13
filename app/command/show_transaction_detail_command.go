@@ -11,22 +11,31 @@ import (
     "time"
 )
 
-type ShowTransactionsCommand struct {
+type ShowTransactionDetailCommand struct {
     EthClient *client.EthClient
 }
 
-func (command *ShowTransactionsCommand) Execute() {
+func (command *ShowTransactionDetailCommand) Execute() {
+    fmt.Print("Please input transaction hex: ")
     transactionHex, _ := utils.NewCommandLine().Input()
-    
+
     if transactionHex == "" {
         return
     }
-
+    fmt.Println("")
+    
     ethClient := command.EthClient
-    receipts := ethClient.GetTransactionReceipt(transactionHex)
-    transaction := ethClient.GetTransactionByHex(transactionHex)
+    receipts, err := ethClient.GetTransactionReceipt(transactionHex)
+    if err != nil {
+        return
+    }
 
-    sender, err := client.GetAddresBySender(transaction)
+    transaction, err := ethClient.GetTransactionByHex(transactionHex)
+    if err != nil {
+        return
+    }
+
+    sender, err := ethClient.GetAddresBySender(transaction)
     if err != nil {
         return
     }

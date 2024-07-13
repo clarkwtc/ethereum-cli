@@ -1,5 +1,7 @@
 package core
 
+import "fmt"
+
 type Controller struct {
     Commands map[string]ICommand
 }
@@ -18,4 +20,5 @@ func (controller *Controller) Execute(key string) {
     }
 
     controller.Commands[key].Execute()
+    fmt.Println("")
 }

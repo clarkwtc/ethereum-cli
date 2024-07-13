@@ -32,8 +32,8 @@ func initContorller() *Controller {
     controller := NewController()
     controller.AddCommand("help", &command.HelpCommand{})
     controller.AddCommand("exit", &command.ExitCommand{})
-    controller.AddCommand("transaction", &command.ShowTransactionsCommand{EthClient: ethClient})
-
+    controller.AddCommand("transaction", &command.ShowTransactionDetailCommand{EthClient: ethClient})
+    controller.AddCommand("latest", &command.ShowLatestTransactionCommand{EthClient: ethClient})
     return controller
 }
 
