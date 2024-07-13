@@ -30,6 +30,7 @@ func initContorller() *Controller {
     ethClient := client.NewEthClient(url)
 
     controller := NewController()
+    controller.AddCommand("help", &command.HelpCommand{})
     controller.AddCommand("exit", &command.ExitCommand{})
     controller.AddCommand("transaction", &command.ShowTransactionsCommand{EthClient: ethClient})
 
