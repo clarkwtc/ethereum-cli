@@ -10,8 +10,8 @@ import (
 )
 
 type EthClient struct {
-    Context context.Context
-    Client  *ethclient.Client
+    context context.Context
+    client  *ethclient.Client
     URL     string
 }
 
@@ -21,12 +21,17 @@ func NewEthClient(url string) *EthClient {
     if err != nil {
         fmt.Println(err)
     }
+    
     return &EthClient{ctx, client, url}
 }
 
-func (eth *EthClient) GetTransactionReceipt(transactionHex string) (*types.Receipt, error) {
+func (eth *EthClient) Close() {
+    eth.Close()
+}
+
+func (eth *EthClient) TransactionReceipt(transactionHex string) (*types.Receipt, error) {
     transactionHash := common.HexToHash(transactionHex)
-    receipts, err := eth.Client.TransactionReceipt(eth.Context, transactionHash)
+    receipts, err := eth.client.TransactionReceipt(eth.context, transactionHash)
     if err != nil {
         fmt.Println(err)
     }
@@ -34,9 +39,9 @@ func (eth *EthClient) GetTransactionReceipt(transactionHex string) (*types.Recei
     return receipts, err
 }
 
-func (eth *EthClient) GetTransactionByHex(transactionHex string) (*types.Transaction, error) {
+func (eth *EthClient) TransactionByHash(transactionHex string) (*types.Transaction, error) {
     transactionHash := common.HexToHash(transactionHex)
-    transaction, pending, err := eth.Client.TransactionByHash(eth.Context, transactionHash)
+    transaction, pending, err := eth.client.TransactionByHash(eth.context, transactionHash)
     if pending {
         fmt.Println(pending)
     }
@@ -61,8 +66,8 @@ func (eth *EthClient) GetAddresBySender(tx *types.Transaction) (common.Address, 
     return types.Sender(signer, tx)
 }
 
-func (eth *EthClient) GetBlockByHash(hash common.Hash) (*types.Block, error) {
-    block, err := eth.Client.BlockByHash(eth.Context, hash)
+func (eth *EthClient) BlockByHash(hash common.Hash) (*types.Block, error) {
+    block, err := eth.client.BlockByHash(eth.context, hash)
     if err != nil {
         fmt.Println(err)
     }
@@ -70,8 +75,8 @@ func (eth *EthClient) GetBlockByHash(hash common.Hash) (*types.Block, error) {
     return block, err
 }
 
-func (eth *EthClient) GetHeaderByNumber() (*types.Header, error) {
-    number, err := eth.Client.HeaderByNumber(eth.Context, nil)
+func (eth *EthClient) HeaderByNumber() (*types.Header, error) {
+    number, err := eth.client.HeaderByNumber(eth.context, nil)
     if err != nil {
         fmt.Println(err)
     }
@@ -79,11 +84,31 @@ func (eth *EthClient) GetHeaderByNumber() (*types.Header, error) {
     return number, err
 }
 
-func (eth *EthClient) GetBlockByNumber(number *big.Int) (*types.Block, error) {
-    block, err := eth.Client.BlockByNumber(eth.Context, number)
+func (eth *EthClient) BlockByNumber(number *big.Int) (*types.Block, error) {
+    block, err := eth.client.BlockByNumber(eth.context, number)
     if err != nil {
         fmt.Println(err)
     }
 
     return block, err
+}
+
+func (eth *EthClient) BalanceAt(account common.Address) (*big.Int, error) {
+    balance, err := eth.client.BalanceAt(eth.context, account, nil)
+    if err != nil {
+        fmt.Println(err)
+        return nil, err
+    }
+
+    return balance, err
+}
+
+func (eth *EthClient) NonceAt(account common.Address) (uint64, error) {
+    nonce, err := eth.client.NonceAt(eth.context, account, nil)
+    if err != nil {
+        fmt.Println(err)
+        return 0, err
+    }
+
+    return nonce, err
 }

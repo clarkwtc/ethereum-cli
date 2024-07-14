@@ -12,12 +12,12 @@ type ShowLatestTransactionCommand struct {
 func (command *ShowLatestTransactionCommand) Execute() {
     ethClient := command.EthClient
 
-    header, err := ethClient.GetHeaderByNumber()
+    header, err := ethClient.HeaderByNumber()
     if err != nil {
         return
     }
 
-    block, err := ethClient.GetBlockByNumber(header.Number)
+    block, err := ethClient.BlockByNumber(header.Number)
     if err != nil {
         return
     }

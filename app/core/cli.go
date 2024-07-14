@@ -34,6 +34,8 @@ func initContorller() *Controller {
     controller.AddCommand("exit", &command.ExitCommand{})
     controller.AddCommand("status", &command.StatusCommand{Config: config})
     controller.AddCommand("switch", &command.SwitchEnvironCommand{EthClient: ethClient})
+    controller.AddCommand("create", &command.CreateAccountCommand{EthClient: ethClient})
+    controller.AddCommand("account", &command.ShowAccountCommand{EthClient: ethClient})
     controller.AddCommand("transaction", &command.ShowTransactionDetailCommand{EthClient: ethClient})
     controller.AddCommand("latest", &command.ShowLatestTransactionCommand{EthClient: ethClient})
     return controller

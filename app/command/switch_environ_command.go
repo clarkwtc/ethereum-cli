@@ -16,7 +16,7 @@ func (command *SwitchEnvironCommand) Execute() {
     urlType, _ := utils.NewCommandLine().Input()
     url := configure.GetURLByType(urlType)
 
-    command.EthClient.Client.Close()
+    command.EthClient.Close()
     command.EthClient = client.NewEthClient(url)
 
     fmt.Printf("Connected ... %s\n", url)

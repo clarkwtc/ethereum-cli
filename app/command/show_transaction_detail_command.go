@@ -25,12 +25,12 @@ func (command *ShowTransactionDetailCommand) Execute() {
     fmt.Println("")
 
     ethClient := command.EthClient
-    receipts, err := ethClient.GetTransactionReceipt(transactionHex)
+    receipts, err := ethClient.TransactionReceipt(transactionHex)
     if err != nil {
         return
     }
 
-    transaction, err := ethClient.GetTransactionByHex(transactionHex)
+    transaction, err := ethClient.TransactionByHash(transactionHex)
     if err != nil {
         return
     }
@@ -40,7 +40,7 @@ func (command *ShowTransactionDetailCommand) Execute() {
         return
     }
 
-    block, err := ethClient.GetBlockByHash(receipts.BlockHash)
+    block, err := ethClient.BlockByHash(receipts.BlockHash)
     if err != nil {
         return
     }
