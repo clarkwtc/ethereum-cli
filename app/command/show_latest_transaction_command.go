@@ -6,18 +6,18 @@ import (
 )
 
 type ShowLatestTransactionCommand struct {
-    EthClient *client.EthClient
+    EthClientManager *client.EthClientManager
 }
 
 func (command *ShowLatestTransactionCommand) Execute() {
-    ethClient := command.EthClient
+    ethClientManager := command.EthClientManager
 
-    header, err := ethClient.HeaderByNumber()
+    header, err := ethClientManager.HeaderByNumber()
     if err != nil {
         return
     }
 
-    block, err := ethClient.BlockByNumber(header.Number)
+    block, err := ethClientManager.BlockByNumber(header.Number)
     if err != nil {
         return
     }

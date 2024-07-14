@@ -1,6 +1,10 @@
 package configure
 
-import "os"
+import (
+    "fmt"
+    "os"
+    "strings"
+)
 
 type Config struct {
     URL string
@@ -14,12 +18,5 @@ func NewConfing() *Config {
 }
 
 func GetURLByType(urlType string) string {
-    var url string
-    switch urlType {
-    case "main":
-        url = os.Getenv("BLOCK_MAIN_CHAIN_URL")
-    default:
-        url = os.Getenv("BLOCK_TEST_CHAIN_URL")
-    }
-    return url
+    return os.Getenv(fmt.Sprintf("BLOCK_%s_CHAIN_URL", strings.ToUpper(urlType)))
 }

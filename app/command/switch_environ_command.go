@@ -8,7 +8,8 @@ import (
 )
 
 type SwitchEnvironCommand struct {
-    EthClient *client.EthClient
+    EthClientManager *client.EthClientManager
+    Config           *configure.Config
 }
 
 func (command *SwitchEnvironCommand) Execute() {
@@ -16,8 +17,8 @@ func (command *SwitchEnvironCommand) Execute() {
     urlType, _ := utils.NewCommandLine().Input()
     url := configure.GetURLByType(urlType)
 
-    command.EthClient.Close()
-    command.EthClient = client.NewEthClient(url)
+    command.EthClientManager.ReconnectEthClient(url)
+    command.Config.URL = url
 
     fmt.Printf("Connected ... %s\n", url)
 }

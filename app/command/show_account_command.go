@@ -9,7 +9,7 @@ import (
 )
 
 type ShowAccountCommand struct {
-    EthClient *client.EthClient
+    EthClientManager *client.EthClientManager
 }
 
 func (command *ShowAccountCommand) Execute() {
@@ -19,20 +19,20 @@ func (command *ShowAccountCommand) Execute() {
         fmt.Println(err)
         return
     }
-    
+
     keyJson, err := os.ReadFile("./keystore/" + fileName)
     if err != nil {
         fmt.Println(err)
         return
     }
-    
+
     fmt.Println("Please input password:")
     password, err := utils.NewCommandLine().Input()
     if err != nil {
         fmt.Println(err)
         return
     }
-    
+
     privateKey, err := keystore.DecryptKey(keyJson, password)
     if err != nil {
         fmt.Println(err)
@@ -40,14 +40,14 @@ func (command *ShowAccountCommand) Execute() {
     }
 
     address := privateKey.Address
-    ethClient := command.EthClient
+    ethClientManager := command.EthClientManager
 
-    balance, err := ethClient.BalanceAt(address)
+    balance, err := ethClientManager.BalanceAt(address)
     if err != nil {
         return
     }
 
-    nonce, err := ethClient.NonceAt(address)
+    nonce, err := ethClientManager.NonceAt(address)
     if err != nil {
         return
     }

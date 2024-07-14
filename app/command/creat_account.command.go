@@ -9,7 +9,7 @@ import (
 )
 
 type CreateAccountCommand struct {
-    EthClient *client.EthClient
+    EthClientManager *client.EthClientManager
 }
 
 func (command *CreateAccountCommand) Execute() {
@@ -30,7 +30,7 @@ func (command *CreateAccountCommand) Execute() {
     if err != nil {
         return
     }
-    
+
     fmt.Printf("Address: %s\n", account.Address.Hex())
     fmt.Printf("Store path: %s\n", account.URL.Path)
 }

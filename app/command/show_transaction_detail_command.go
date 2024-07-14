@@ -12,7 +12,7 @@ import (
 )
 
 type ShowTransactionDetailCommand struct {
-    EthClient *client.EthClient
+    EthClientManager *client.EthClientManager
 }
 
 func (command *ShowTransactionDetailCommand) Execute() {
@@ -24,23 +24,23 @@ func (command *ShowTransactionDetailCommand) Execute() {
     }
     fmt.Println("")
 
-    ethClient := command.EthClient
-    receipts, err := ethClient.TransactionReceipt(transactionHex)
+    ethClientManager := command.EthClientManager
+    receipts, err := ethClientManager.TransactionReceipt(transactionHex)
     if err != nil {
         return
     }
 
-    transaction, err := ethClient.TransactionByHash(transactionHex)
+    transaction, err := ethClientManager.TransactionByHash(transactionHex)
     if err != nil {
         return
     }
 
-    sender, err := ethClient.GetAddresBySender(transaction)
+    sender, err := ethClientManager.GetAddresBySender(transaction)
     if err != nil {
         return
     }
 
-    block, err := ethClient.BlockByHash(receipts.BlockHash)
+    block, err := ethClientManager.BlockByHash(receipts.BlockHash)
     if err != nil {
         return
     }
